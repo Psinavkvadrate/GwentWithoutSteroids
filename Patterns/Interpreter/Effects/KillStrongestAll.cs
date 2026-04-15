@@ -7,8 +7,12 @@ namespace GwentLikeGame.Patterns.Interpreter.Effects
     {
         public void Interpret(GameContext context)
         {
-            var max = BoardUtils.GetOpponentCards(context)
-                .Max(c => c.Power);
+           var all = BoardUtils.GetOpponentCards(context);
+
+            if (!all.Any())
+                return;
+
+            var max = all.Max(c => c.Power);
 
             var targets = BoardUtils.GetOpponentCards(context)
                 .Where(c => c.Power == max)

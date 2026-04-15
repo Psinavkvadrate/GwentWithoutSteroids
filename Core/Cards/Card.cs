@@ -1,4 +1,5 @@
 using GwentLikeGame.Core.GameLogic;
+using GwentLikeGame.Rendering.Proxy;
 
 namespace GwentLikeGame.Core.Cards
 {
@@ -6,6 +7,7 @@ namespace GwentLikeGame.Core.Cards
     {
         public string Name { get; }
         public int Power { get; set; }
+        public ICardImage Image { get; set; }
 
         protected Card(string name, int power)
         {

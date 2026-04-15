@@ -1,15 +1,16 @@
 using System.Collections.Generic;
+using SFML.Graphics;
 
 namespace GwentLikeGame.Rendering.Proxy
 {
-    public static class TextureCache
+    public class TextureCache
     {
-        private static Dictionary<string, TextureProxy> _cache = new();
+        private static Dictionary<string, Texture> _cache = new();
 
-        public static TextureProxy Get(string path)
+        public static Texture Get(string path)
         {
             if (!_cache.ContainsKey(path))
-                _cache[path] = new TextureProxy(path);
+                _cache[path] = new Texture(path);
 
             return _cache[path];
         }

@@ -16,11 +16,13 @@ namespace GwentLikeGame.Patterns.Interpreter.Effects
 
         public void Interpret(GameContext context)
         {
-            var cards = BoardUtils.GetOpponentCards(context)
+            var all = BoardUtils
+                .GetAllCards(context.CurrentPlayer)
+                .Concat(BoardUtils.GetAllCards(context.Opponent))
                 .OrderBy(_ => _rnd.Next())
                 .Take(_count);
 
-            foreach (var c in cards)
+            foreach (var c in all)
                 c.Power = 1;
         }
     }

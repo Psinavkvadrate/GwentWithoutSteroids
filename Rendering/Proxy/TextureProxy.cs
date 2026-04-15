@@ -14,12 +14,7 @@ namespace GwentLikeGame.Rendering.Proxy
 
         public Texture GetTexture()
         {
-            if (_realTexture == null)
-            {
-                _realTexture = new Texture(_path);
-            }
-
-            return _realTexture;
+            return TextureCache.Get(_path);
         }
     }
 }

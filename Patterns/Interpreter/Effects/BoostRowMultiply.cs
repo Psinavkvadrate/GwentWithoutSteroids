@@ -1,4 +1,4 @@
-using System.Linq;
+using GwentLikeGame.Core.Board;
 using GwentLikeGame.Core.GameLogic;
 
 namespace GwentLikeGame.Patterns.Interpreter.Effects
@@ -6,15 +6,17 @@ namespace GwentLikeGame.Patterns.Interpreter.Effects
     public class BoostRowMultiply : IExpression
     {
         private int _mult;
+        private RowType _row;
 
-        public BoostRowMultiply(int mult)
+        public BoostRowMultiply(int mult, RowType row)
         {
             _mult = mult;
+            _row = row;
         }
 
         public void Interpret(GameContext context)
         {
-            var row = context.Opponent.Board.GetRows().First().Value;
+            var row = context.CurrentPlayer.Board.GetRow(_row);
 
             foreach (var card in row.GetCards())
             {

@@ -10,7 +10,7 @@ namespace GwentLikeGame.Patterns.Interpreter
         {
             return effectId switch
             {
-                "boost_row_x2" => new BoostRowMultiply(2),
+                "boost_row_x2" => new BoostRowMultiply(2, RowType.Melee),
                 "boost_row_2" => new BoostRowAdd(2, RowType.Melee),
                 "kill_strongest" => new KillStrongest(),
                 "kill_weakest" => new KillWeakest(2),

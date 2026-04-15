@@ -14,12 +14,23 @@ namespace GwentLikeGame.Patterns.Interpreter.Effects
 
         public void Interpret(GameContext context)
         {
-            var cards = BoardUtils.GetOpponentCards(context)
+            var all = BoardUtils.GetOpponentCards(context);
+
+            if (!all.Any())
+                return;
+
+            var weakest = all
                 .OrderBy(c => c.Power)
                 .Take(_count)
                 .ToList();
 
-            foreach (var card in cards)
+            int threshold = weakest.Max(c => c.Power);
+
+            var targets = all
+                .Where(c => c.Power <= threshold)
+                .ToList();
+
+            foreach (var card in targets)
             {
                 foreach (var row in context.Opponent.Board.GetRows().Values)
                 {
