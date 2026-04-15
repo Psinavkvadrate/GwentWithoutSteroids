@@ -15,7 +15,7 @@ namespace GwentLikeGame.Rendering
         private Game _game;
         private Player _player;
         private Vector2f _passPos = new Vector2f(1100, 600);
-        private Vector2f _passSize = new Vector2f(120, 50);
+        private Vector2f _passSize = new Vector2f(140, 60);
 
         public GameWindow(Game game, Player player, GameUiObserver observer)
         {
@@ -33,7 +33,7 @@ namespace GwentLikeGame.Rendering
                 _window.Close();
             };
 
-            _renderer = new Renderer(_window, observer);
+            _renderer = new Renderer(_window, observer, _game);
         }
 
         public void Run()
@@ -44,54 +44,72 @@ namespace GwentLikeGame.Rendering
             {
                 _window.DispatchEvents();
 
-                _game.Tick(); 
+                _game.Tick();
+
+                _renderer.BuildFromGame(_player, _game.GetOpponent(_player)); // ← ПЕРЕД отрисовкой
 
                 _window.Clear(Color.Black);
-
-                _renderer.BuildFromGame(_player, _game.GetOpponent(_player));
                 _renderer.Draw();
-
                 _window.Display();
             }
         }
 
         private void OnMouseClick(object sender, MouseButtonEventArgs e)
         {
+            var mousePos = new Vector2f(e.Position.X, e.Position.Y);
+
+            // ================= MULLIGAN =================
+            if (_game.State == GameState.Mulligan)
+            {
+                var card = _renderer.GetCardAtPosition(mousePos);
+
+                if (card != null)
+                {
+                    int index = _player.Hand.IndexOf(card);
+
+                    if (index != -1)
+                    {
+                        _game.ReplaceCard(index);
+                        return;
+                    }
+                }
+
+                // ПКМ или кнопка → закончить муллиган
+                if (e.Button == Mouse.Button.Right)
+                {
+                    _game.EndMulligan();
+                    return;
+                }
+
+                return;
+            }
+
+            // ================= PLAYING =================
             if (!_game.WaitingForPlayerInput)
                 return;
 
-            var mousePos = new Vector2f(e.Position.X, e.Position.Y);
-
+            // PASS
             if (mousePos.X >= _passPos.X &&
                 mousePos.X <= _passPos.X + _passSize.X &&
                 mousePos.Y >= _passPos.Y &&
                 mousePos.Y <= _passPos.Y + _passSize.Y)
             {
-                _player.HasPassed = true;
-                _game.EndPlayerTurn();
+                _game.PassTurn();
                 return;
             }
 
-            var card = _renderer.GetCardAtPosition(mousePos);
+            var view = _renderer.GetCardViewAtPosition(mousePos);
 
-            if (card != null)
+            if (view != null)
             {
-                PlayPlayerCard(card);
+                _game.ReplaceCard(view.HandIndex);
+                return;
             }
         }
 
         private void PlayPlayerCard(Card card)
         {
-            _player.Hand.Remove(card);
-
-            card.Play(new GameContext
-            {
-                CurrentPlayer = _player,
-                Opponent = _game.GetOpponent(_player),
-                Game = _game
-            });
-
-            _game.EndPlayerTurn();
+            _game.PlayCard(card);
         }
     }
 }

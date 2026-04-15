@@ -7,8 +7,12 @@ namespace GwentLikeGame.Rendering.Models
     public class CardView
     {
         public RectangleShape Shape { get; set; }
-        public Text Text { get; set; }
+        public Text NameText { get; set; }
+        public Text PowerText { get; set; }
+        public Text TypeText { get; set; }
+
         public Vector2f Position { get; set; }
         public Card Card { get; set; }
+        public int HandIndex { get; set; }
     }
 }

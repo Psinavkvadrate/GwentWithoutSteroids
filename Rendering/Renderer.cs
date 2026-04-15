@@ -4,6 +4,9 @@ using GwentLikeGame.Core.Players;
 using GwentLikeGame.Rendering.Models;
 using System.Collections.Generic;
 using GwentLikeGame.Core.Cards;
+using GwentLikeGame.Core.Board;
+using SFML.Window;
+using GwentLikeGame.Core.GameLogic;
 
 namespace GwentLikeGame.Rendering
 {
@@ -16,13 +19,43 @@ namespace GwentLikeGame.Rendering
         private int _playerPower;
         private int _aiPower;
 
-        public Renderer(RenderWindow window, GameUiObserver observer)
+        private Sprite _background;
+
+        private Game _game;
+
+        public Renderer(RenderWindow window, GameUiObserver observer, Game game)
         {
             _window = window;
             _uiObserver = observer;
-            _font = new Font("gwentFont.ttf");
+            _game = game;
+            _font = new Font("assets/gwentFont.ttf");
+            var texture = new Texture("assets/gwentBg.jpg");
+            _background = new Sprite(texture);
+
+            // растянуть на окно
+            var size = _window.Size;
+            _background.Scale = new Vector2f(
+                size.X / (float)texture.Size.X,
+                size.Y / (float)texture.Size.Y
+            );
         }
         
+        private Color GetCardColor(Card card)
+        {
+            if (card is UnitCard unit)
+            {
+                return unit.Row switch
+                {
+                    RowType.Melee => new Color(200, 80, 80),
+                    RowType.Ranged => new Color(80, 200, 80),
+                    RowType.Siege => new Color(80, 80, 200),
+                    _ => Color.White
+                };
+            }
+
+            return new Color(200, 200, 80); // Skill
+        }
+
         private void DrawBoard(Player player, float startY)
         {
             float x = 50;
@@ -51,81 +84,135 @@ namespace GwentLikeGame.Rendering
         {
             _views.Clear();
 
-            // --- РУКА ---
-            float x = 50;
-            float y = 550;
+            BuildHand(player);
+            BuildBoard(opponent, 50, true);
+            BuildBoard(player, 300, false);
 
-            foreach (var card in player.Hand)
-            {
-                var rect = new RectangleShape(new Vector2f(80, 120))
-                {
-                    Position = new Vector2f(x, y),
-                    FillColor = Color.Blue
-                };
-
-                _views.Add(new CardView
-                {
-                    Shape = rect,
-                    Position = rect.Position,
-                    Card = card
-                });
-
-                x += 100;
-            }
-
-            // --- СТОЛ ИГРОКА ---
-            DrawBoard(player, 350);
-
-            // --- СТОЛ AI ---
-            DrawBoard(opponent, 100);
             _playerPower = player.Board.GetPower();
             _aiPower = opponent.Board.GetPower();
         }
 
+        private void BuildHand(Player player)
+        {
+            float x = 100;
+            float y = 580; 
+
+            for (int i = 0; i < player.Hand.Count; i++)
+            {
+                var card = player.Hand[i];
+                var view = CreateCardView(card, new Vector2f(x, y));
+                
+                view.HandIndex = i; 
+                
+                _views.Add(view);
+
+                x += 110;
+            }
+        }
+
+        private void BuildBoard(Player player, float startY, bool isEnemy)
+        {
+            float rowSpacing = 120;
+            float cardSpacing = 110;
+
+            var rows = player.Board.GetRows().ToList();
+
+            if (isEnemy)
+                rows.Reverse(); // ← ключевая строка
+
+            foreach (var row in rows)
+            {
+                float x = 150;
+                float y = startY;
+
+                foreach (var card in row.Value.GetCards())
+                {
+                    var view = CreateCardView(card, new Vector2f(x, y));
+                    _views.Add(view);
+
+                    x += cardSpacing;
+                }
+
+                var label = new Text(_font, row.Key.ToString(), 14)
+                {
+                    Position = new Vector2f(20, y + 40)
+                };
+
+                _window.Draw(label);
+
+                startY += rowSpacing;
+            }
+        }
+
         public void Draw()
         {
+            _window.Draw(_background); 
+
             foreach (var v in _views)
             {
                 _window.Draw(v.Shape);
-
-                var name = new Text(_font, v.Card.Name, 12)
-                {
-                    Position = v.Position + new Vector2f(5, 5)
-                };
-
-                var power = new Text(_font, v.Card.Power.ToString(), 16)
-                {
-                    Position = v.Position + new Vector2f(5, 90)
-                };
-
-                _window.Draw(name);
-                _window.Draw(power);
+                _window.Draw(v.NameText);
+                _window.Draw(v.PowerText);
+                _window.Draw(v.TypeText);
             }
 
-            // PASS кнопка
-            var pass = new RectangleShape(new Vector2f(120, 50))
+            var mouse = Mouse.GetPosition(_window);
+            var mousePos = new Vector2f(mouse.X, mouse.Y);
+
+            foreach (var v in _views)
             {
-                Position = new Vector2f(1100, 600),
-                FillColor = Color.Red
+                Console.WriteLine(v.Shape.GetGlobalBounds());
+                if (v.Shape.GetGlobalBounds().Contains(mousePos))
+                    v.Shape.OutlineColor = Color.Yellow;
+                else
+                    v.Shape.OutlineColor = Color.Black;
+            }
+
+            if (_game.State == GameState.Mulligan)
+            {
+                var text = new Text(_font, "MULLIGAN PHASE (RMB to finish)", 20)
+                {
+                    Position = new Vector2f(400, 20)
+                };
+                _window.Draw(text);
+            }
+
+            DrawUI();
+        }
+
+        private void DrawUI()
+        {
+            // Scores
+            var playerScore = new Text(_font, $"Player: {_playerPower}", 26)
+            {
+                Position = new Vector2f(50, 650)
             };
 
-            var playerScore = new Text(_font, $"Player: {_playerPower}", 24)
+            var aiScore = new Text(_font, $"AI: {_aiPower}", 26)
             {
-                Position = new Vector2f(50, 500)
-            };
-
-            var aiScore = new Text(_font, $"AI: {_aiPower}", 24)
-            {
-                Position = new Vector2f(50, 20)
+                Position = new Vector2f(50, 10)
             };
 
             _window.Draw(playerScore);
             _window.Draw(aiScore);
 
+            // PASS кнопка
+            var pass = new RectangleShape(new Vector2f(140, 60))
+            {
+                Position = new Vector2f(1100, 600),
+                FillColor = new Color(180, 50, 50)
+            };
+
+            var passText = new Text(_font, "PASS", 18)
+            {
+                Position = new Vector2f(1120, 610)
+            };
+
             _window.Draw(pass);
+            _window.Draw(passText);
 
+            // Лог
             float y = 200;
-
             foreach (var line in _uiObserver.GetLog())
             {
                 var text = new Text(_font, line, 14)
@@ -146,6 +233,58 @@ namespace GwentLikeGame.Rendering
                     return v.Card;
             }
             return null;
+        }
+
+        public CardView GetCardViewAtPosition(Vector2f pos)
+        {
+            foreach (var v in _views)
+            {
+                if (v.Shape.GetGlobalBounds().Contains(pos))
+                    return v;
+            }
+            return null;
+        }
+
+        private CardView CreateCardView(Card card, Vector2f position)
+        {
+            var rect = new RectangleShape(new Vector2f(90, 140))
+            {
+                Position = position,
+                FillColor = GetCardColor(card),
+                OutlineColor = Color.Black,
+                OutlineThickness = 2
+            };
+
+            var name = new Text(_font, card.Name, 12)
+            {
+                Position = position + new Vector2f(5, 5)
+            };
+
+            var power = new Text(_font, card.Power.ToString(), 22)
+            {
+                Position = position + new Vector2f(5, 100)
+            };
+
+            string type = card switch
+            {
+                UnitCard u => u.Row.ToString(),
+                _ => "Skill"
+            };
+
+            var typeText = new Text(_font, type, 10)
+            {
+                Position = position + new Vector2f(5, 120)
+            };
+
+            return new CardView
+            {
+                Shape = rect,
+                NameText = name,
+                PowerText = power,
+                TypeText = typeText,
+                Position = position,
+                Card = card
+            };
         }
     }
 }
