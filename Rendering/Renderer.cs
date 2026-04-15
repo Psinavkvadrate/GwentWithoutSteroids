@@ -22,6 +22,15 @@ namespace GwentLikeGame.Rendering
         private Sprite _background;
 
         private Game _game;
+        private const float FIELD_X = 0;
+        private const float FIELD_WIDTH = 1000;
+        private const float CARD_WIDTH = 80f;
+        private const float CARD_HEIGHT = 120f;
+
+        private const float ROW_HEIGHT = 130f; // расстояние между рядами
+        private const float ROW_PADDING = 10f; // отступ внутри ряда
+        private const float ENEMY_ROW_OFFSET = -CARD_HEIGHT * 2f / 3f;
+        private const float GLOBAL_Y_OFFSET = 120f;
 
         public Renderer(RenderWindow window, GameUiObserver observer, Game game)
         {
@@ -85,68 +94,129 @@ namespace GwentLikeGame.Rendering
             _views.Clear();
 
             BuildHand(player);
-            BuildBoard(opponent, 50, true);
-            BuildBoard(player, 300, false);
+            BuildBoard(opponent, 40 + GLOBAL_Y_OFFSET, true);
+            BuildBoard(player, 350 + GLOBAL_Y_OFFSET, false);
 
             _playerPower = player.Board.GetPower();
             _aiPower = opponent.Board.GetPower();
         }
 
-        private void BuildHand(Player player)
-        {
-            float x = 100;
-            float y = 580; 
-
-            for (int i = 0; i < player.Hand.Count; i++)
-            {
-                var card = player.Hand[i];
-                var view = CreateCardView(card, new Vector2f(x, y));
-                
-                view.HandIndex = i; 
-                
-                _views.Add(view);
-
-                x += 110;
-            }
-        }
-
         private void BuildBoard(Player player, float startY, bool isEnemy)
         {
-            float rowSpacing = 120;
-            float cardSpacing = 110;
-
             var rows = player.Board.GetRows().ToList();
 
             if (isEnemy)
-                rows.Reverse(); // ← ключевая строка
+                rows.Reverse();
 
-            foreach (var row in rows)
+            for (int i = 0; i < rows.Count; i++)
             {
-                float x = 150;
-                float y = startY;
+                var row = rows[i];
+                var cards = row.Value.GetCards().ToList();
 
-                foreach (var card in row.Value.GetCards())
+                int count = Math.Max(1, cards.Count);
+
+                float minSpacing = CARD_WIDTH + 10;
+
+                float cardSpacing = Math.Max(
+                    minSpacing,
+                    FIELD_WIDTH / count
+                );
+
+                float totalWidth = (count - 1) * cardSpacing + CARD_WIDTH;
+                float startX = FIELD_X + (FIELD_WIDTH - totalWidth) / 2;
+
+                float x = startX;
+
+                float y = startY + i * ROW_HEIGHT + ROW_PADDING;
+
+                // 🔥 ВОТ ЭТА СТРОКА — КЛЮЧЕВАЯ
+                if (isEnemy)
+                    y += ENEMY_ROW_OFFSET;
+
+                foreach (var card in cards)
                 {
                     var view = CreateCardView(card, new Vector2f(x, y));
                     _views.Add(view);
 
                     x += cardSpacing;
                 }
+            }
+        }
 
-                var label = new Text(_font, row.Key.ToString(), 14)
+        private void DrawFieldLines()
+        {
+            float fieldWidth = FIELD_WIDTH;
+
+            float topStart = 40 + GLOBAL_Y_OFFSET;
+            float bottomStart = 350 + GLOBAL_Y_OFFSET;
+
+            // AI ряды
+            for (int i = 0; i < 3; i++)
+            {
+                float y = topStart + i * ROW_HEIGHT;
+
+                var line = new RectangleShape(new Vector2f(fieldWidth, 2))
                 {
-                    Position = new Vector2f(20, y + 40)
+                    Position = new Vector2f(FIELD_X, y),
+                    FillColor = Color.Black
                 };
 
-                _window.Draw(label);
+                _window.Draw(line);
+            }
 
-                startY += rowSpacing;
+            // Центральная линия
+            var middle = new RectangleShape(new Vector2f(fieldWidth, 5))
+            {
+                Position = new Vector2f(FIELD_X, 330 + GLOBAL_Y_OFFSET),
+                FillColor = Color.Black
+            };
+            _window.Draw(middle);
+
+            // Игрок ряды
+            for (int i = 0; i < 3; i++)
+            {
+                float y = bottomStart + i * ROW_HEIGHT;
+
+                var line = new RectangleShape(new Vector2f(fieldWidth, 2))
+                {
+                    Position = new Vector2f(FIELD_X, y),
+                    FillColor = Color.Black
+                };
+
+                _window.Draw(line);
+            }
+        }
+
+        private void BuildHand(Player player)
+        {
+            int count = Math.Max(1, player.Hand.Count);
+
+            float minSpacing = CARD_WIDTH + 20;
+
+            float spacing = Math.Max(minSpacing, FIELD_WIDTH / count);
+            float totalWidth = (count - 1) * spacing + CARD_WIDTH;
+
+            float x = FIELD_X + (FIELD_WIDTH - totalWidth) / 2;
+            float y = 780 + GLOBAL_Y_OFFSET;
+
+            for (int i = 0; i < player.Hand.Count; i++)
+            {
+                var card = player.Hand[i];
+                var view = CreateCardView(card, new Vector2f(x, y));
+
+                view.HandIndex = i;
+
+                _views.Add(view);
+
+                x += spacing;
             }
         }
 
         public void Draw()
         {
-            _window.Draw(_background); 
+            _window.Draw(_background);
+
+            DrawFieldLines();
 
             foreach (var v in _views)
             {
@@ -161,7 +231,6 @@ namespace GwentLikeGame.Rendering
 
             foreach (var v in _views)
             {
-                Console.WriteLine(v.Shape.GetGlobalBounds());
                 if (v.Shape.GetGlobalBounds().Contains(mousePos))
                     v.Shape.OutlineColor = Color.Yellow;
                 else
@@ -182,15 +251,17 @@ namespace GwentLikeGame.Rendering
 
         private void DrawUI()
         {
+            float uiX = 1150;
+
             // Scores
             var playerScore = new Text(_font, $"Player: {_playerPower}", 26)
             {
-                Position = new Vector2f(50, 650)
+                Position = new Vector2f(uiX, 700 + GLOBAL_Y_OFFSET)
             };
 
             var aiScore = new Text(_font, $"AI: {_aiPower}", 26)
             {
-                Position = new Vector2f(50, 10)
+                Position = new Vector2f(uiX, 20 + GLOBAL_Y_OFFSET)
             };
 
             _window.Draw(playerScore);
@@ -199,25 +270,26 @@ namespace GwentLikeGame.Rendering
             // PASS кнопка
             var pass = new RectangleShape(new Vector2f(140, 60))
             {
-                Position = new Vector2f(1100, 600),
+                Position = new Vector2f(uiX, 600 + GLOBAL_Y_OFFSET),
                 FillColor = new Color(180, 50, 50)
             };
 
             var passText = new Text(_font, "PASS", 18)
             {
-                Position = new Vector2f(1120, 610)
+                Position = new Vector2f(uiX + 20, 610 + GLOBAL_Y_OFFSET)
             };
 
             _window.Draw(pass);
             _window.Draw(passText);
 
             // Лог
-            float y = 200;
+            float y = 150 + GLOBAL_Y_OFFSET;
+
             foreach (var line in _uiObserver.GetLog())
             {
                 var text = new Text(_font, line, 14)
                 {
-                    Position = new Vector2f(900, y)
+                    Position = new Vector2f(uiX, y)
                 };
 
                 _window.Draw(text);
@@ -237,17 +309,33 @@ namespace GwentLikeGame.Rendering
 
         public CardView GetCardViewAtPosition(Vector2f pos)
         {
-            foreach (var v in _views)
+            for (int i = _views.Count - 1; i >= 0; i--)
             {
+                var v = _views[i];
+
                 if (v.Shape.GetGlobalBounds().Contains(pos))
                     return v;
             }
+
+            return null;
+        }
+
+        public CardView GetHandCardAtPosition(Vector2f pos)
+        {
+            for (int i = _views.Count - 1; i >= 0; i--)
+            {
+                var v = _views[i];
+
+                if (v.HandIndex >= 0 && v.Shape.GetGlobalBounds().Contains(pos))
+                    return v;
+            }
+
             return null;
         }
 
         private CardView CreateCardView(Card card, Vector2f position)
         {
-            var rect = new RectangleShape(new Vector2f(90, 140))
+            var rect = new RectangleShape(new Vector2f(80, 120))
             {
                 Position = position,
                 FillColor = GetCardColor(card),
@@ -262,7 +350,7 @@ namespace GwentLikeGame.Rendering
 
             var power = new Text(_font, card.Power.ToString(), 22)
             {
-                Position = position + new Vector2f(5, 100)
+                Position = position + new Vector2f(CARD_WIDTH - 15, CARD_HEIGHT - 25)
             };
 
             string type = card switch
@@ -273,7 +361,7 @@ namespace GwentLikeGame.Rendering
 
             var typeText = new Text(_font, type, 10)
             {
-                Position = position + new Vector2f(5, 120)
+                Position = position + new Vector2f(5, CARD_HEIGHT - 15)
             };
 
             return new CardView

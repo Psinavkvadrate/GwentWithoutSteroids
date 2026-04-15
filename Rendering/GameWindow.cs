@@ -14,7 +14,7 @@ namespace GwentLikeGame.Rendering
 
         private Game _game;
         private Player _player;
-        private Vector2f _passPos = new Vector2f(1100, 600);
+        private Vector2f _passPos = new Vector2f(1100, 600 + 120f);
         private Vector2f _passSize = new Vector2f(140, 60);
 
         public GameWindow(Game game, Player player, GameUiObserver observer)
@@ -23,8 +23,8 @@ namespace GwentLikeGame.Rendering
             _player = player;
 
             _window = new RenderWindow(
-                new VideoMode(new SFML.System.Vector2u(1280, 720)),
-                "Gwent-like Game"
+                new VideoMode(new Vector2u(1600, 1400)),
+                "Gwent without steroids"
             );
             _window.MouseButtonPressed += OnMouseClick;
 
@@ -61,20 +61,14 @@ namespace GwentLikeGame.Rendering
             // ================= MULLIGAN =================
             if (_game.State == GameState.Mulligan)
             {
-                var card = _renderer.GetCardAtPosition(mousePos);
+                var viewCard = _renderer.GetHandCardAtPosition(mousePos);
 
-                if (card != null)
+                if (viewCard != null)
                 {
-                    int index = _player.Hand.IndexOf(card);
-
-                    if (index != -1)
-                    {
-                        _game.ReplaceCard(index);
-                        return;
-                    }
+                    _game.ReplaceCard(viewCard.HandIndex);
+                    return;
                 }
 
-                // ПКМ или кнопка → закончить муллиган
                 if (e.Button == Mouse.Button.Right)
                 {
                     _game.EndMulligan();
@@ -100,9 +94,10 @@ namespace GwentLikeGame.Rendering
 
             var view = _renderer.GetCardViewAtPosition(mousePos);
 
-            if (view != null)
+            if (view != null && view.HandIndex >= 0)
             {
-                _game.ReplaceCard(view.HandIndex);
+                var card = _player.Hand[view.HandIndex];
+                _game.PlayCard(card);
                 return;
             }
         }

@@ -213,7 +213,7 @@ namespace GwentLikeGame.Core.GameLogic
             {
                 WaitingForPlayerInput = false;
 
-                _aiBrain.MakeMove(_ai, _player);
+                _aiBrain.MakeMove(_ai, _player, this);
                 SwapTurns();
             }
         }
@@ -231,7 +231,8 @@ namespace GwentLikeGame.Core.GameLogic
             card.Play(new GameContext
             {
                 CurrentPlayer = _player,
-                Opponent = _ai
+                Opponent = _ai,
+                Game = this
             });
 
             WaitingForPlayerInput = false;

@@ -7,7 +7,7 @@ namespace GwentLikeGame.AI
     {
         private readonly AiEvaluator _evaluator = new();
 
-        public void MakeMove(Player ai, Player opponent)
+        public void MakeMove(Player ai, Player opponent, Game game)
         {
             var action = _evaluator.Evaluate(ai, opponent);
 
@@ -23,7 +23,8 @@ namespace GwentLikeGame.AI
             card.Play(new GameContext
             {
                 CurrentPlayer = ai,
-                Opponent = opponent
+                Opponent = opponent,
+                Game = game
             });
         }
     }

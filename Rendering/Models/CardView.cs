@@ -13,6 +13,6 @@ namespace GwentLikeGame.Rendering.Models
 
         public Vector2f Position { get; set; }
         public Card Card { get; set; }
-        public int HandIndex { get; set; }
+        public int HandIndex { get; set; } = -1;
     }
 }
