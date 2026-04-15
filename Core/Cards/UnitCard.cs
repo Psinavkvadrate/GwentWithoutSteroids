@@ -1,5 +1,6 @@
 using GwentLikeGame.Core.Board;
 using GwentLikeGame.Core.GameLogic;
+using GwentLikeGame.Patterns.Observer;
 
 namespace GwentLikeGame.Core.Cards
 {
@@ -16,6 +17,11 @@ namespace GwentLikeGame.Core.Cards
         public override void Play(GameContext context)
         {
             context.CurrentPlayer.PlayCard(this);
+
+            context.Game?.Notify(new GameEvent(
+                GameEventType.CardPlayed,
+                $"{context.CurrentPlayer.Name} played {Name} ({Power})"
+            ));
         }
     }
 }

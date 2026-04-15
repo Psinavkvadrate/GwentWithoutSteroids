@@ -121,3 +121,4 @@
 /home/dev/MIET/3-2/PIAPS/lab_7/bin/Debug/net10.0/runtimes/win-x86/native/vcruntime140.dll
 /home/dev/MIET/3-2/PIAPS/lab_7/obj/Debug/net10.0/lab_7.csproj.AssemblyReference.cache
 /home/dev/MIET/3-2/PIAPS/lab_7/obj/Debug/net10.0/lab_7.csproj.Up2Date
+/home/dev/MIET/3-2/PIAPS/lab_7/obj/Debug/net10.0/lab_7.sourcelink.json

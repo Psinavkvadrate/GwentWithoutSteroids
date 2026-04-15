@@ -1,4 +1,5 @@
 using System;
+using GwentLikeGame.Core.Board;
 using GwentLikeGame.Patterns.Interpreter.Effects;
 
 namespace GwentLikeGame.Patterns.Interpreter
@@ -10,7 +11,7 @@ namespace GwentLikeGame.Patterns.Interpreter
             return effectId switch
             {
                 "boost_row_x2" => new BoostRowMultiply(2),
-                "boost_row_2" => new BoostRowAdd(2),
+                "boost_row_2" => new BoostRowAdd(2, RowType.Melee),
                 "kill_strongest" => new KillStrongest(),
                 "kill_weakest" => new KillWeakest(2),
                 "kill_all_strongest" => new KillStrongestAll(),

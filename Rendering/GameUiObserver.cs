@@ -8,6 +8,7 @@ namespace GwentLikeGame.Rendering
     {
         private string _lastMessage = "";
         private List<string> _log = new();
+        public List<string> GetLog() => _log;
 
         public void OnEvent(GameEvent gameEvent)
         {
@@ -19,6 +20,5 @@ namespace GwentLikeGame.Rendering
         }
 
         public string GetLastMessage() => _lastMessage;
-        public List<string> GetLog() => _log;
     }
 }

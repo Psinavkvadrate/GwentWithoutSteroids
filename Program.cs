@@ -47,7 +47,7 @@ namespace GwentLikeGame
             game.Subscribe(console);
             game.Subscribe(ui);
             
-            var window = new GameWindow(game, player);
+            var window = new GameWindow(game, player, ui);
             window.Run();
         }
     }

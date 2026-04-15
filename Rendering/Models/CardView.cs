@@ -1,3 +1,4 @@
+using GwentLikeGame.Core.Cards;
 using SFML.Graphics;
 using SFML.System;
 
@@ -8,5 +9,6 @@ namespace GwentLikeGame.Rendering.Models
         public RectangleShape Shape { get; set; }
         public Text Text { get; set; }
         public Vector2f Position { get; set; }
+        public Card Card { get; set; }
     }
 }

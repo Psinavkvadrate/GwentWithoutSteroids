@@ -276,8 +276,6 @@ namespace GwentLikeGame.Core.GameLogic
             {
                 EndRound();
                 _roundStarted = false;
-
-                StartRound();
                 return;
             }
 
@@ -290,15 +288,13 @@ namespace GwentLikeGame.Core.GameLogic
             if (_current == _player && !_player.HasPassed)
             {
                 WaitingForPlayerInput = true;
-                return; 
+                return;
             }
 
             if (_current == _ai && !_ai.HasPassed)
             {
                 _aiBrain.MakeMove(_ai, _player);
             }
-
-            SwapTurns();
 
             SwapTurns();
         }
@@ -341,6 +337,16 @@ namespace GwentLikeGame.Core.GameLogic
                     _aiRounds
                 ));
             }
+        }
+        public Player GetOpponent(Player p)
+        {
+            return p == _player ? _ai : _player;
+        }
+
+        public void EndPlayerTurn()
+        {
+            WaitingForPlayerInput = false;
+            SwapTurns();
         }
     }
 }
