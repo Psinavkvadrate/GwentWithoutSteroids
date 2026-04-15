@@ -23,5 +23,10 @@ namespace GwentLikeGame.Core.Cards
                 $"{context.CurrentPlayer.Name} played {Name} ({Power})"
             ));
         }
+
+        public override Card Clone()
+        {
+            return new UnitCard(Name, Power, Row);
+        }
     }
 }

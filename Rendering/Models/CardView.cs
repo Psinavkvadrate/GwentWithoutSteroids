@@ -14,5 +14,8 @@ namespace GwentLikeGame.Rendering.Models
         public Vector2f Position { get; set; }
         public Card Card { get; set; }
         public int HandIndex { get; set; } = -1;
+        public Vector2f TargetPosition { get; set; }
+        public Vector2f CurrentPosition { get; set; }
+        public bool IsAnimating { get; set; } = true;
     }
 }

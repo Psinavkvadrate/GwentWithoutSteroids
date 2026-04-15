@@ -30,8 +30,13 @@ namespace GwentLikeGame.Core.Players
             for (int i = 0; i < count && cards.Count > 0; i++)
             {
                 var index = rnd.Next(cards.Count);
-                Hand.Add(cards[index]);
-                cards.RemoveAt(index);
+
+                var template = cards[index];
+
+                // 🔥 КЛЮЧЕВОЕ ИЗМЕНЕНИЕ
+                Hand.Add(template.Clone());  // ✅ кладём КОПИЮ
+
+                cards.RemoveAt(index);       // можно оставить (как "вытянули карту")
             }
         }
 

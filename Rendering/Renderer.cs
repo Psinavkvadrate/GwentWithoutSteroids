@@ -189,15 +189,26 @@ namespace GwentLikeGame.Rendering
 
         private void BuildHand(Player player)
         {
-            int count = Math.Max(1, player.Hand.Count);
+            int count = player.Hand.Count;
 
-            float minSpacing = CARD_WIDTH + 20;
+            if (count == 0)
+                return;
 
-            float spacing = Math.Max(minSpacing, FIELD_WIDTH / count);
+            float spacing = CARD_WIDTH + 10;
+
             float totalWidth = (count - 1) * spacing + CARD_WIDTH;
 
-            float x = FIELD_X + (FIELD_WIDTH - totalWidth) / 2;
+            // 🔥 если не помещается — уменьшаем spacing
+            if (totalWidth > FIELD_WIDTH)
+            {
+                spacing = (FIELD_WIDTH - CARD_WIDTH) / (count - 1);
+                totalWidth = FIELD_WIDTH;
+            }
+
+            float startX = FIELD_X + (FIELD_WIDTH - totalWidth) / 2;
             float y = 780 + GLOBAL_Y_OFFSET;
+
+            float x = startX;
 
             for (int i = 0; i < player.Hand.Count; i++)
             {
@@ -214,6 +225,29 @@ namespace GwentLikeGame.Rendering
 
         public void Draw()
         {
+
+            foreach (var v in _views)
+            {
+                if (v.IsAnimating)
+                {
+                    var diff = v.TargetPosition - v.CurrentPosition;
+
+                    if (Math.Abs(diff.X) < 1 && Math.Abs(diff.Y) < 1)
+                    {
+                        v.CurrentPosition = v.TargetPosition;
+                        v.IsAnimating = false;
+                    }
+                    else
+                    {
+                        v.CurrentPosition += diff * 0.1f; // плавность
+                    }
+
+                    v.Shape.Position = v.CurrentPosition;
+                    v.NameText.Position = v.CurrentPosition + new Vector2f(5, 5);
+                    v.PowerText.Position = v.CurrentPosition + new Vector2f(65, 95);
+                    v.TypeText.Position = v.CurrentPosition + new Vector2f(5, 105);
+                }
+            }
             _window.Draw(_background);
 
             DrawFieldLines();
@@ -232,9 +266,13 @@ namespace GwentLikeGame.Rendering
             foreach (var v in _views)
             {
                 if (v.Shape.GetGlobalBounds().Contains(mousePos))
-                    v.Shape.OutlineColor = Color.Yellow;
+                {
+                    v.Shape.Scale = new Vector2f(1.1f, 1.1f);
+                }
                 else
-                    v.Shape.OutlineColor = Color.Black;
+                {
+                    v.Shape.Scale = new Vector2f(1f, 1f);
+                }
             }
 
             if (_game.State == GameState.Mulligan)
@@ -244,6 +282,17 @@ namespace GwentLikeGame.Rendering
                     Position = new Vector2f(400, 20)
                 };
                 _window.Draw(text);
+            }
+
+            if (!_game.WaitingForPlayerInput && _game.State == GameState.Playing)
+            {
+                var overlay = new RectangleShape(new Vector2f(1000, 800))
+                {
+                    Position = new Vector2f(0, 0),
+                    FillColor = new Color(0, 0, 0, 100)
+                };
+
+                _window.Draw(overlay);
             }
 
             DrawUI();
@@ -266,6 +315,17 @@ namespace GwentLikeGame.Rendering
 
             _window.Draw(playerScore);
             _window.Draw(aiScore);
+
+            // ================= ROUND SCORE =================
+
+            var roundsText = new Text(_font,
+                $"ROUNDS\nPlayer: {_game.PlayerRounds}\nAI: {_game.AiRounds}",
+                22)
+            {
+                Position = new Vector2f(uiX, 80 + GLOBAL_Y_OFFSET)
+            };
+
+            _window.Draw(roundsText);
 
             // PASS кнопка
             var pass = new RectangleShape(new Vector2f(140, 60))
@@ -295,6 +355,19 @@ namespace GwentLikeGame.Rendering
                 _window.Draw(text);
                 y += 20;
             }
+
+            var turnText = new Text(_font,
+                _game.WaitingForPlayerInput ? "YOUR TURN" : "AI THINKING...",
+                24)
+            {
+                Position = new Vector2f(1150, 500)
+            };
+
+            turnText.FillColor = _game.WaitingForPlayerInput
+                ? Color.Green
+                : Color.Red;
+
+            _window.Draw(turnText);
         }
 
         public Card GetCardAtPosition(Vector2f pos)
@@ -326,8 +399,13 @@ namespace GwentLikeGame.Rendering
             {
                 var v = _views[i];
 
-                if (v.HandIndex >= 0 && v.Shape.GetGlobalBounds().Contains(pos))
+                // 🔥 ДОБАВЬ ЭТУ ПРОВЕРКУ
+                if (v.HandIndex >= 0 &&
+                    v.Position.Y > 700 && // рука внизу
+                    v.Shape.GetGlobalBounds().Contains(pos))
+                {
                     return v;
+                }
             }
 
             return null;
@@ -371,6 +449,12 @@ namespace GwentLikeGame.Rendering
                 PowerText = power,
                 TypeText = typeText,
                 Position = position,
+
+                // 🔥 НОВОЕ
+                CurrentPosition = position + new Vector2f(0, -50), // старт чуть выше
+                TargetPosition = position,
+                IsAnimating = true,
+
                 Card = card
             };
         }

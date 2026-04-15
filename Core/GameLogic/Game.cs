@@ -30,6 +30,11 @@ namespace GwentLikeGame.Core.GameLogic
 
         public int MulligansLeft => _mulligansLeft;
         public GameState State => _state;
+        private DateTime _aiTurnTime;
+        private int _aiDelayMs;
+        private bool _aiThinking = false;
+        public int PlayerRounds => _playerRounds;
+        public int AiRounds => _aiRounds;
 
         public Game(Player player, Player ai)
         {
@@ -53,6 +58,10 @@ namespace GwentLikeGame.Core.GameLogic
 
                 case GameState.Mulligan:
                     WaitingForPlayerInput = true;
+                    if (_mulligansLeft <= 0)
+                    {
+                        EndMulligan();
+                    }
                     break;
 
                 case GameState.Playing:
@@ -113,10 +122,9 @@ namespace GwentLikeGame.Core.GameLogic
             var oldCard = player.Hand[index];
             player.Hand.RemoveAt(index);
 
-            var newCard = deck[rnd.Next(deck.Count)];
+            var newCardTemplate = deck[rnd.Next(deck.Count)];
 
-            deck.Remove(newCard);
-            deck.Add(oldCard);
+            var newCard = newCardTemplate.Clone();
 
             player.Hand.Insert(index, newCard);
 
@@ -213,8 +221,23 @@ namespace GwentLikeGame.Core.GameLogic
             {
                 WaitingForPlayerInput = false;
 
-                _aiBrain.MakeMove(_ai, _player, this);
-                SwapTurns();
+                if (!_aiThinking)
+                {
+                    _aiThinking = true;
+
+                    var rnd = new Random();
+                    _aiDelayMs = rnd.Next(1000, 4000); // 1-4 сек
+                    _aiTurnTime = DateTime.Now;
+                }
+
+                var elapsed = (DateTime.Now - _aiTurnTime).TotalMilliseconds;
+
+                if (elapsed >= _aiDelayMs)
+                {
+                    _aiBrain.MakeMove(_ai, _player, this);
+                    _aiThinking = false;
+                    SwapTurns();
+                }
             }
         }
 
@@ -284,6 +307,9 @@ namespace GwentLikeGame.Core.GameLogic
                 _aiRounds
             ));
 
+            _player.Board.Clear();
+            _ai.Board.Clear();
+
             if (_playerRounds >= 2 || _aiRounds >= 2)
             {
                 IsFinished = true;
@@ -297,6 +323,10 @@ namespace GwentLikeGame.Core.GameLogic
 
                 return;
             }
+            _player.Board.Clear();
+            _ai.Board.Clear();
+
+            DrawAfterRound();
 
             _state = GameState.CoinFlip;
         }
@@ -322,6 +352,17 @@ namespace GwentLikeGame.Core.GameLogic
         public Player GetOpponent(Player p)
         {
             return p == _player ? _ai : _player;
+        }
+
+        private void DrawAfterRound()
+        {
+            _player.Draw(3);
+            _ai.Draw(3);
+
+            Notify(new GameEvent(
+                GameEventType.Info,
+                "Both players draw 3 cards"
+            ));
         }
     }
 }

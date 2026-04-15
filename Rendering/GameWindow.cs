@@ -62,7 +62,7 @@ namespace GwentLikeGame.Rendering
             if (_game.State == GameState.Mulligan)
             {
                 var viewCard = _renderer.GetHandCardAtPosition(mousePos);
-
+                Console.WriteLine($"Clicked hand index: {viewCard?.HandIndex}");
                 if (viewCard != null)
                 {
                     _game.ReplaceCard(viewCard.HandIndex);

@@ -25,5 +25,10 @@ namespace GwentLikeGame.Core.Cards
                 $"{context.CurrentPlayer.Name} used {Name}"
             ));
         }
+
+        public override Card Clone()
+        {
+            return new SkillCard(Name, EffectId);
+        }
     }
 }

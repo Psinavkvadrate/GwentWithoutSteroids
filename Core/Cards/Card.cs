@@ -14,5 +14,7 @@ namespace GwentLikeGame.Core.Cards
         }
 
         public abstract void Play(GameContext context);
+
+        public abstract Card Clone();
     }
 }
