@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using GwentLikeGame.Core.Cards;
+using GwentWithoutSteroids.Core.Cards;
 
-namespace GwentLikeGame.Core.Decks
+namespace GwentWithoutSteroids.Core.Decks
 {
     public class Deck
     {

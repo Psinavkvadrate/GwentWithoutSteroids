@@ -1,6 +1,6 @@
-using GwentLikeGame.Core.GameLogic;
-using GwentLikeGame.Rendering.Proxy;
-namespace GwentLikeGame.Core.Cards
+using GwentWithoutSteroids.Core.GameLogic;
+using GwentWithoutSteroids.Rendering.Proxy;
+namespace GwentWithoutSteroids.Core.Cards
 {
     public abstract class Card
     {

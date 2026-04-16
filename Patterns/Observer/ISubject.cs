@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace GwentLikeGame.Patterns.Observer
+namespace GwentWithoutSteroids.Patterns.Observer
 {
     public interface ISubject
     {

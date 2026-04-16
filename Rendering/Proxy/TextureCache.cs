@@ -1,7 +1,7 @@
 using SFML.Graphics;
 using System.Collections.Generic;
 
-namespace GwentLikeGame.Rendering.Proxy
+namespace GwentWithoutSteroids.Rendering.Proxy
 {
     public static class TextureCache
     {

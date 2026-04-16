@@ -1,9 +1,9 @@
 using System.Linq;
-using GwentLikeGame.Core.Cards;
-using GwentLikeGame.Core.GameLogic;
-using GwentLikeGame.Core.Players;
+using GwentWithoutSteroids.Core.Cards;
+using GwentWithoutSteroids.Core.GameLogic;
+using GwentWithoutSteroids.Core.Players;
 
-namespace GwentLikeGame.Patterns.Interpreter.Effects
+namespace GwentWithoutSteroids.Patterns.Interpreter.Effects
 {
     public class KillStrongest : IExpression
     {

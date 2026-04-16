@@ -1,10 +1,10 @@
 using System;
 using System.Linq;
-using GwentLikeGame.Core.GameLogic;
-using GwentLikeGame.Core.Players;
-using GwentLikeGame.Core.Cards;
+using GwentWithoutSteroids.Core.GameLogic;
+using GwentWithoutSteroids.Core.Players;
+using GwentWithoutSteroids.Core.Cards;
 
-namespace GwentLikeGame.AI
+namespace GwentWithoutSteroids.AI
 {
     public class AiEvaluator
     {

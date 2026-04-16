@@ -1,8 +1,8 @@
-using GwentLikeGame.Patterns.Observer;
+using GwentWithoutSteroids.Patterns.Observer;
 using SFML.Graphics;
 using System.Collections.Generic;
 
-namespace GwentLikeGame.Rendering
+namespace GwentWithoutSteroids.Rendering
 {
     public class GameUiObserver : IObserver
     {

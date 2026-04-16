@@ -1,4 +1,4 @@
-namespace GwentLikeGame.Core.Board.Components
+namespace GwentWithoutSteroids.Core.Board.Components
 {
     public interface IBoardComponent
     {

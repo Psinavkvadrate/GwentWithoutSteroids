@@ -1,11 +1,11 @@
 using System;
-using GwentLikeGame.Core.Players;
-using GwentLikeGame.Core.Cards;
+using GwentWithoutSteroids.Core.Players;
+using GwentWithoutSteroids.Core.Cards;
 using System.Collections.Generic;
-using GwentLikeGame.Patterns.Observer;
-using GwentLikeGame.AI;
+using GwentWithoutSteroids.Patterns.Observer;
+using GwentWithoutSteroids.AI;
 
-namespace GwentLikeGame.Core.GameLogic
+namespace GwentWithoutSteroids.Core.GameLogic
 {
     public class Game : ISubject
     {

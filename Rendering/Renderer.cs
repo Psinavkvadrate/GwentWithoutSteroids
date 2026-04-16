@@ -1,14 +1,14 @@
 using SFML.Graphics;
 using SFML.System;
-using GwentLikeGame.Core.Players;
-using GwentLikeGame.Rendering.Models;
+using GwentWithoutSteroids.Core.Players;
+using GwentWithoutSteroids.Rendering.Models;
 using System.Collections.Generic;
-using GwentLikeGame.Core.Cards;
-using GwentLikeGame.Core.Board;
+using GwentWithoutSteroids.Core.Cards;
+using GwentWithoutSteroids.Core.Board;
 using SFML.Window;
-using GwentLikeGame.Core.GameLogic;
+using GwentWithoutSteroids.Core.GameLogic;
 
-namespace GwentLikeGame.Rendering
+namespace GwentWithoutSteroids.Rendering
 {
     public class Renderer
     {

@@ -1,8 +1,8 @@
 using System;
-using GwentLikeGame.Core.Board;
-using GwentLikeGame.Patterns.Interpreter.Effects;
+using GwentWithoutSteroids.Core.Board;
+using GwentWithoutSteroids.Patterns.Interpreter.Effects;
 
-namespace GwentLikeGame.Patterns.Interpreter
+namespace GwentWithoutSteroids.Patterns.Interpreter
 {
     public static class EffectParser
     {

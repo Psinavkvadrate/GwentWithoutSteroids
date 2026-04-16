@@ -1,4 +1,4 @@
-namespace GwentLikeGame.Patterns.Observer
+namespace GwentWithoutSteroids.Patterns.Observer
 {
     public enum GameEventType
     {

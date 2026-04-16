@@ -1,8 +1,8 @@
-using GwentLikeGame.Core.Cards;
-using GwentLikeGame.Core.Board;
-using GwentLikeGame.Rendering.Proxy;
+using GwentWithoutSteroids.Core.Cards;
+using GwentWithoutSteroids.Core.Board;
+using GwentWithoutSteroids.Rendering.Proxy;
 
-namespace GwentLikeGame.Patterns.Factory
+namespace GwentWithoutSteroids.Patterns.Factory
 {
     public class DefaultCardFactory : ICardFactory
     {

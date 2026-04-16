@@ -1,6 +1,6 @@
 using System;
 
-namespace GwentLikeGame.Patterns.Observer
+namespace GwentWithoutSteroids.Patterns.Observer
 {
     public class ConsoleGameLogger : IObserver
     {

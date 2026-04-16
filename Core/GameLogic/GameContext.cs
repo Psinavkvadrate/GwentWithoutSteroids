@@ -1,6 +1,6 @@
-using GwentLikeGame.Patterns.Observer;
+using GwentWithoutSteroids.Patterns.Observer;
 
-namespace GwentLikeGame.Core.GameLogic
+namespace GwentWithoutSteroids.Core.GameLogic
 {
     public class GameContext
     {

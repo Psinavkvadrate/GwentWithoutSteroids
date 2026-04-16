@@ -1,7 +1,7 @@
-using GwentLikeGame.Core.Players;
-using GwentLikeGame.Core.GameLogic;
+using GwentWithoutSteroids.Core.Players;
+using GwentWithoutSteroids.Core.GameLogic;
 
-namespace GwentLikeGame.AI
+namespace GwentWithoutSteroids.AI
 {
     public class AiPlayer
     {

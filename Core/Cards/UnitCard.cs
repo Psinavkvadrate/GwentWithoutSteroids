@@ -1,8 +1,8 @@
-using GwentLikeGame.Core.Board;
-using GwentLikeGame.Core.GameLogic;
-using GwentLikeGame.Patterns.Observer;
+using GwentWithoutSteroids.Core.Board;
+using GwentWithoutSteroids.Core.GameLogic;
+using GwentWithoutSteroids.Patterns.Observer;
 
-namespace GwentLikeGame.Core.Cards
+namespace GwentWithoutSteroids.Core.Cards
 {
     public class UnitCard : Card
     {

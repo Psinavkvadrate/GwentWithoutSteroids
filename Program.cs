@@ -1,11 +1,11 @@
-﻿using GwentLikeGame.Patterns.Builder;
-using GwentLikeGame.Core.Players;
-using GwentLikeGame.Core.GameLogic;
-using GwentLikeGame.Patterns.Factory;
-using GwentLikeGame.Patterns.Observer;
-using GwentLikeGame.Rendering;
+﻿using GwentWithoutSteroids.Patterns.Builder;
+using GwentWithoutSteroids.Core.Players;
+using GwentWithoutSteroids.Core.GameLogic;
+using GwentWithoutSteroids.Patterns.Factory;
+using GwentWithoutSteroids.Patterns.Observer;
+using GwentWithoutSteroids.Rendering;
 
-namespace GwentLikeGame
+namespace GwentWithoutSteroids
 {
     class Program
     {

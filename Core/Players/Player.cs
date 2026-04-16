@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using GwentLikeGame.Core.Board;
-using GwentLikeGame.Core.Cards;
-using GwentLikeGame.Core.Decks;
-using GwentLikeGame.Core.Board.Components;
+using GwentWithoutSteroids.Core.Board;
+using GwentWithoutSteroids.Core.Cards;
+using GwentWithoutSteroids.Core.Decks;
+using GwentWithoutSteroids.Core.Board.Components;
 
-namespace GwentLikeGame.Core.Players
+namespace GwentWithoutSteroids.Core.Players
 {
     public class Player
     {

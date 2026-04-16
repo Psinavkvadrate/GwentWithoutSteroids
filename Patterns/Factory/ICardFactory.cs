@@ -1,7 +1,7 @@
-using GwentLikeGame.Core.Cards;
-using GwentLikeGame.Core.Board;
+using GwentWithoutSteroids.Core.Cards;
+using GwentWithoutSteroids.Core.Board;
 
-namespace GwentLikeGame.Patterns.Factory
+namespace GwentWithoutSteroids.Patterns.Factory
 {
     public interface ICardFactory
     {

@@ -1,6 +1,6 @@
-using GwentLikeGame.Core.Cards;
+using GwentWithoutSteroids.Core.Cards;
 
-namespace GwentLikeGame.AI
+namespace GwentWithoutSteroids.AI
 {
     public enum AiActionType
     {

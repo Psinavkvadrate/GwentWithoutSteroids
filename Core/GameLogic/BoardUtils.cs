@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
-using GwentLikeGame.Core.Cards;
-using GwentLikeGame.Core.Board;
-using GwentLikeGame.Core.Players;
+using GwentWithoutSteroids.Core.Cards;
+using GwentWithoutSteroids.Core.Board;
+using GwentWithoutSteroids.Core.Players;
 
-namespace GwentLikeGame.Core.GameLogic
+namespace GwentWithoutSteroids.Core.GameLogic
 {
     public static class BoardUtils
     {

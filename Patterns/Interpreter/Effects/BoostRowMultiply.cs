@@ -1,7 +1,7 @@
-using GwentLikeGame.Core.Board;
-using GwentLikeGame.Core.GameLogic;
+using GwentWithoutSteroids.Core.Board;
+using GwentWithoutSteroids.Core.GameLogic;
 
-namespace GwentLikeGame.Patterns.Interpreter.Effects
+namespace GwentWithoutSteroids.Patterns.Interpreter.Effects
 {
     public class BoostRowMultiply : IExpression
     {

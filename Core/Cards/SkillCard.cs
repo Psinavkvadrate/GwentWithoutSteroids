@@ -1,9 +1,9 @@
 using System;
-using GwentLikeGame.Core.GameLogic;
-using GwentLikeGame.Patterns.Interpreter;
-using GwentLikeGame.Patterns.Observer;
+using GwentWithoutSteroids.Core.GameLogic;
+using GwentWithoutSteroids.Patterns.Interpreter;
+using GwentWithoutSteroids.Patterns.Observer;
 
-namespace GwentLikeGame.Core.Cards
+namespace GwentWithoutSteroids.Core.Cards
 {
     public class SkillCard : Card
     {

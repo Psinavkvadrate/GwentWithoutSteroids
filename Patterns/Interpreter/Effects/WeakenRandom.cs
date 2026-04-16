@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
-using GwentLikeGame.Core.GameLogic;
+using GwentWithoutSteroids.Core.GameLogic;
 
-namespace GwentLikeGame.Patterns.Interpreter.Effects
+namespace GwentWithoutSteroids.Patterns.Interpreter.Effects
 {
     public class WeakenRandom : IExpression
     {

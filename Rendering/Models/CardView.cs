@@ -1,8 +1,8 @@
-using GwentLikeGame.Core.Cards;
+using GwentWithoutSteroids.Core.Cards;
 using SFML.Graphics;
 using SFML.System;
 
-namespace GwentLikeGame.Rendering.Models
+namespace GwentWithoutSteroids.Rendering.Models
 {
     public class CardView
     {

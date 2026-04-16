@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using GwentLikeGame.Core.Board;
-using GwentLikeGame.Core.Board.Components;
+using GwentWithoutSteroids.Core.Board;
+using GwentWithoutSteroids.Core.Board.Components;
 
-namespace GwentLikeGame.Core.Board.Components
+namespace GwentWithoutSteroids.Core.Board.Components
 {
     public class BoardComposite : IBoardComponent
     {

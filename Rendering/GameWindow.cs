@@ -1,11 +1,11 @@
 using SFML.Graphics;
 using SFML.Window;
-using GwentLikeGame.Core.GameLogic;
-using GwentLikeGame.Core.Players;
-using GwentLikeGame.Core.Cards;
+using GwentWithoutSteroids.Core.GameLogic;
+using GwentWithoutSteroids.Core.Players;
+using GwentWithoutSteroids.Core.Cards;
 using SFML.System;
 
-namespace GwentLikeGame.Rendering
+namespace GwentWithoutSteroids.Rendering
 {
     public class GameWindow
     {

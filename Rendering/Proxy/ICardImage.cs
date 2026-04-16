@@ -1,5 +1,5 @@
 using SFML.Graphics;
-namespace GwentLikeGame.Rendering.Proxy
+namespace GwentWithoutSteroids.Rendering.Proxy
 {
   public interface ICardImage
   {

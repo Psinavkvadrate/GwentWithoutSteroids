@@ -1,6 +1,6 @@
-using GwentLikeGame.Core.Cards;
+using GwentWithoutSteroids.Core.Cards;
 
-namespace GwentLikeGame.Core.Board.Components
+namespace GwentWithoutSteroids.Core.Board.Components
 {
     public class CardComponent : IBoardComponent
     {

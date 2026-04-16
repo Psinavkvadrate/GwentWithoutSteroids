@@ -1,6 +1,6 @@
-using GwentLikeGame.Core.GameLogic;
+using GwentWithoutSteroids.Core.GameLogic;
 
-namespace GwentLikeGame.Patterns.Interpreter
+namespace GwentWithoutSteroids.Patterns.Interpreter
 {
     public interface IExpression
     {

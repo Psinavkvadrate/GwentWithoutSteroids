@@ -1,6 +1,6 @@
 using System;
 
-namespace GwentLikeGame.Core.Board
+namespace GwentWithoutSteroids.Core.Board
 {
     public enum RowType
     {
