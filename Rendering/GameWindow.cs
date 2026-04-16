@@ -65,6 +65,17 @@ namespace GwentWithoutSteroids.Rendering
         {
             var mousePos = new Vector2f(e.Position.X, e.Position.Y);
 
+            if (_game.IsFinished)
+            {
+                if (mousePos.X >= 650 && mousePos.X <= 950 &&
+                    mousePos.Y >= 550 && mousePos.Y <= 630)
+                {
+                    _game.Reset();
+                }
+
+                return;
+            }
+
             if (mousePos.X >= _passPos.X &&
                 mousePos.X <= _passPos.X + _passSize.X &&
                 mousePos.Y >= _passPos.Y &&

@@ -35,6 +35,8 @@ namespace GwentWithoutSteroids.Rendering
         private bool _passHovered;
         private bool _passPressed;
         private float _passScale = 1f;
+        private FloatRect _restartBounds;
+        private bool _restartHovered;
 
         public Renderer(RenderWindow window, GameUiObserver observer, Game game)
         {
@@ -309,6 +311,11 @@ namespace GwentWithoutSteroids.Rendering
                 _window.Draw(overlay);
             }
 
+            if (_game.IsFinished)
+            {
+                DrawEndGame();
+            }
+
             DrawUI();
         }
 
@@ -354,7 +361,7 @@ namespace GwentWithoutSteroids.Rendering
             var pass = new RectangleShape(new Vector2f(140, 60))
             {
                 Position = new Vector2f(uiX + 70, 600 + GLOBAL_Y_OFFSET + 30),
-                Origin = new Vector2f(70, 30), // центр
+                Origin = new Vector2f(70, 30),
                 FillColor = _passHovered ? new Color(220, 70, 70) : new Color(180, 50, 50),
                 Scale = new Vector2f(_passScale, _passScale)
             };
@@ -402,6 +409,54 @@ namespace GwentWithoutSteroids.Rendering
 
             _window.Draw(aiCards);
         }
+
+        private void DrawEndGame()
+        {
+            var overlay = new RectangleShape(new Vector2f(_window.Size.X, _window.Size.Y))
+            {
+                Position = new Vector2f(0, 0),
+                FillColor = new Color(0, 0, 0, 180)
+            };
+            _window.Draw(overlay);
+
+            string winner = _game.PlayerRounds > _game.AiRounds
+                ? "PLAYER WINS"
+                : "AI WINS";
+
+            var winText = new Text(_font, winner, 50)
+            {
+                Position = new Vector2f(600, 400),
+                FillColor = Color.White
+            };
+
+            _window.Draw(winText);
+
+            _restartBounds = new FloatRect(
+                new Vector2f(650, 550),
+                new Vector2f(300, 80)
+            );
+
+            var mouse = Mouse.GetPosition(_window);
+            var mousePos = new Vector2f(mouse.X, mouse.Y);
+
+            _restartHovered = _restartBounds.Contains(mousePos);
+
+            var btn = new RectangleShape(new Vector2f(300, 80))
+            {
+                Position = new Vector2f(650, 550),
+                FillColor = _restartHovered
+                    ? new Color(100, 200, 100)
+                    : new Color(70, 150, 70)
+            };
+
+            var text = new Text(_font, "RESTART", 30)
+            {
+                Position = new Vector2f(710, 570)
+            };
+
+            _window.Draw(btn);
+            _window.Draw(text);
+        }   
 
         public Card GetCardAtPosition(Vector2f pos)
         {

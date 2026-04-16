@@ -357,5 +357,25 @@ namespace GwentWithoutSteroids.Core.GameLogic
         {
             return _ai.Hand.Count;
         }
+
+        public void Reset()
+        {
+            _playerRounds = 0;
+            _aiRounds = 0;
+
+            _player.Board.Clear();
+            _ai.Board.Clear();
+
+            _player.Hand.Clear();
+            _ai.Hand.Clear();
+
+            _player.Deck.Reset();
+            _ai.Deck.Reset();     
+
+            IsFinished = false;
+            _state = GameState.CoinFlip;
+
+            Init();
+        }
     }
 }
