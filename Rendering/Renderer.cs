@@ -413,10 +413,13 @@ namespace GwentLikeGame.Rendering
 
         private CardView CreateCardView(Card card, Vector2f position)
         {
+            var texture = card.Image?.GetTexture()
+              ?? new Texture("assets/default.png");
+
             var rect = new RectangleShape(new Vector2f(80, 120))
             {
                 Position = position,
-                FillColor = GetCardColor(card),
+                Texture = texture,
                 OutlineColor = Color.Black,
                 OutlineThickness = 2
             };

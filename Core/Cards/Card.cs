@@ -1,6 +1,5 @@
 using GwentLikeGame.Core.GameLogic;
 using GwentLikeGame.Rendering.Proxy;
-
 namespace GwentLikeGame.Core.Cards
 {
     public abstract class Card

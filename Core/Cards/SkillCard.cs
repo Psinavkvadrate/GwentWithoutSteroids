@@ -28,7 +28,9 @@ namespace GwentLikeGame.Core.Cards
 
         public override Card Clone()
         {
-            return new SkillCard(Name, EffectId);
+            var clone = new SkillCard(Name, EffectId);
+            clone.Image = Image;
+            return clone;
         }
     }
 }

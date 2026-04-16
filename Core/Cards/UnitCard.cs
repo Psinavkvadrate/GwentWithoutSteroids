@@ -26,7 +26,9 @@ namespace GwentLikeGame.Core.Cards
 
         public override Card Clone()
         {
-            return new UnitCard(Name, Power, Row);
+            var clone = new UnitCard(Name, Power, Row);
+            clone.Image = Image;
+            return clone;
         }
     }
 }
