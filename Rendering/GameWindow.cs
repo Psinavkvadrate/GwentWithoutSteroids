@@ -4,6 +4,7 @@ using GwentWithoutSteroids.Core.GameLogic;
 using GwentWithoutSteroids.Core.Players;
 using GwentWithoutSteroids.Core.Cards;
 using SFML.System;
+using SFML.Audio;
 
 namespace GwentWithoutSteroids.Rendering
 {
@@ -16,6 +17,7 @@ namespace GwentWithoutSteroids.Rendering
         private Player _player;
         private Vector2f _passPos = new Vector2f(1100, 600 + 120f);
         private Vector2f _passSize = new Vector2f(140, 60);
+        private Music _music;
 
         public GameWindow(Game game, Player player, GameUiObserver observer)
         {
@@ -34,6 +36,11 @@ namespace GwentWithoutSteroids.Rendering
             };
 
             _renderer = new Renderer(_window, observer, _game);
+
+            _music = new Music("assets/music.mp3");
+            _music.IsLooping = true;
+            _music.Volume = 20;
+            _music.Play();
         }
 
         public void Run()
