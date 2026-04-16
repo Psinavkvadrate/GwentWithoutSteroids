@@ -11,15 +11,19 @@ namespace GwentWithoutSteroids
     {
         static void Main(string[] args)
         {
-            var factory = new DefaultCardFactory();
-            var builder = new DeckBuilder(factory);
+            var defaultFactory = CardFactoryProvider.Create(CardStyle.Default);
+            var heroFactory = CardFactoryProvider.Create(CardStyle.Hero);
+
+            var builder = new DeckBuilder(defaultFactory);
 
             var deck1 = builder
                 .Reset()
+                .UseFactory(heroFactory)
                 .AddMelee("Vernon Roche", 10)
                 .AddMelee("John Natalis", 10)
                 .AddMelee("Esterad Thyssen", 10)
                 .AddMelee("Philippa Eilhart", 10)
+                .UseFactory(defaultFactory)
                 .AddMelee("Redanian Infantry", 1)
                 .AddMelee("Redanian Infantry", 1)
                 .AddMelee("Poor Infantry", 1)
@@ -61,10 +65,12 @@ namespace GwentWithoutSteroids
 
             var deck2 = builder
                 .Reset()
+                .UseFactory(heroFactory)
                 .AddMelee("Draug", 8)
                 .AddMelee("Imlerith", 8)
                 .AddMelee("Leshen", 8)
                 .AddMelee("Kayran", 6)
+                .UseFactory(defaultFactory)
                 .AddMelee("Ghoul", 1)
                 .AddMelee("Ghoul", 1)
                 .AddMelee("Nekker", 2)

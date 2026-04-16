@@ -9,11 +9,17 @@ namespace GwentWithoutSteroids.Patterns.Builder
     public class DeckBuilder
     {
         private List<Card> _cards = new();
-        private readonly ICardFactory _factory;
+        private ICardFactory _factory;
 
         public DeckBuilder(ICardFactory factory)
         {
             _factory = factory;
+        }
+
+        public DeckBuilder UseFactory(ICardFactory factory)
+        {
+            _factory = factory;
+            return this;
         }
 
         public DeckBuilder AddMelee(string name, int power)
