@@ -92,9 +92,9 @@ namespace GwentWithoutSteroids.Rendering
         {
             _views.Clear();
 
-            BuildHand(player);
             BuildBoard(opponent, 40 + GLOBAL_Y_OFFSET, true);
             BuildBoard(player, 350 + GLOBAL_Y_OFFSET, false);
+            BuildHand(player);
 
             _playerPower = player.Board.GetPower();
             _aiPower = opponent.Board.GetPower();
@@ -246,6 +246,17 @@ namespace GwentWithoutSteroids.Rendering
 
             DrawFieldLines();
 
+            var mouse = Mouse.GetPosition(_window);
+            var mousePos = new Vector2f(mouse.X, mouse.Y);
+
+            foreach (var v in _views)
+            {
+                if (v.Shape.GetGlobalBounds().Contains(mousePos))
+                    v.Shape.Scale = new Vector2f(1.1f, 1.1f);
+                else
+                    v.Shape.Scale = new Vector2f(1f, 1f);
+}
+
             foreach (var v in _views)
             {
                 _window.Draw(v.Shape);
@@ -253,9 +264,6 @@ namespace GwentWithoutSteroids.Rendering
                 _window.Draw(v.PowerText);
                 _window.Draw(v.TypeText);
             }
-
-            var mouse = Mouse.GetPosition(_window);
-            var mousePos = new Vector2f(mouse.X, mouse.Y);
 
             foreach (var v in _views)
             {
@@ -389,7 +397,7 @@ namespace GwentWithoutSteroids.Rendering
                 var v = _views[i];
 
                 if (v.HandIndex >= 0 &&
-                    v.Position.Y > 700 && 
+                    v.Shape.Position.Y > 700 &&  
                     v.Shape.GetGlobalBounds().Contains(pos))
                 {
                     return v;

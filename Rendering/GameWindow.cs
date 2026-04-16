@@ -65,6 +65,15 @@ namespace GwentWithoutSteroids.Rendering
         {
             var mousePos = new Vector2f(e.Position.X, e.Position.Y);
 
+            if (mousePos.X >= _passPos.X &&
+                mousePos.X <= _passPos.X + _passSize.X &&
+                mousePos.Y >= _passPos.Y &&
+                mousePos.Y <= _passPos.Y + _passSize.Y)
+            {
+                _game.PassTurn();
+                return;
+            }
+
             if (_game.State == GameState.Mulligan)
             {
                 var viewCard = _renderer.GetHandCardAtPosition(mousePos);
