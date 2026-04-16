@@ -70,6 +70,7 @@ namespace GwentWithoutSteroids.Rendering
                 mousePos.Y >= _passPos.Y &&
                 mousePos.Y <= _passPos.Y + _passSize.Y)
             {
+                _renderer.TriggerPassClick();
                 _game.PassTurn();
                 return;
             }
@@ -101,6 +102,7 @@ namespace GwentWithoutSteroids.Rendering
                 mousePos.Y >= _passPos.Y &&
                 mousePos.Y <= _passPos.Y + _passSize.Y)
             {
+                _renderer.TriggerPassClick();
                 _game.PassTurn();
                 return;
             }

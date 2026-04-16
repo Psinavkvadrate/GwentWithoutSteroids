@@ -31,6 +31,10 @@ namespace GwentWithoutSteroids.Rendering
         private const float ROW_PADDING = 10f; 
         private const float ENEMY_ROW_OFFSET = -CARD_HEIGHT * 2f / 3f;
         private const float GLOBAL_Y_OFFSET = 120f;
+        private FloatRect _passBounds;
+        private bool _passHovered;
+        private bool _passPressed;
+        private float _passScale = 1f;
 
         public Renderer(RenderWindow window, GameUiObserver observer, Game game)
         {
@@ -233,7 +237,15 @@ namespace GwentWithoutSteroids.Rendering
                     }
                     else
                     {
-                        v.CurrentPosition += diff * 0.1f; 
+                        float speed = 0.15f;
+                        var delta = v.TargetPosition - v.CurrentPosition;
+
+                        v.CurrentPosition += delta * speed;
+                        if (delta.X * delta.X + delta.Y * delta.Y < 4f)
+                        {
+                            v.CurrentPosition = v.TargetPosition;
+                            v.IsAnimating = false;
+                        }
                     }
 
                     v.Shape.Position = v.CurrentPosition;
@@ -326,10 +338,25 @@ namespace GwentWithoutSteroids.Rendering
 
             _window.Draw(roundsText);
 
+            _passBounds = new FloatRect(
+                new Vector2f(uiX, 600 + GLOBAL_Y_OFFSET),
+                new Vector2f(140, 60)
+            );
+
+            var mouse = Mouse.GetPosition(_window);
+            var mousePos = new Vector2f(mouse.X, mouse.Y);
+
+            _passHovered = _passBounds.Contains(mousePos);
+
+            float targetScale = _passHovered ? 1.1f : 1f;
+            _passScale += (targetScale - _passScale) * 0.2f;
+
             var pass = new RectangleShape(new Vector2f(140, 60))
             {
-                Position = new Vector2f(uiX, 600 + GLOBAL_Y_OFFSET),
-                FillColor = new Color(180, 50, 50)
+                Position = new Vector2f(uiX + 70, 600 + GLOBAL_Y_OFFSET + 30),
+                Origin = new Vector2f(70, 30), // центр
+                FillColor = _passHovered ? new Color(220, 70, 70) : new Color(180, 50, 50),
+                Scale = new Vector2f(_passScale, _passScale)
             };
 
             var passText = new Text(_font, "PASS", 18)
@@ -365,6 +392,15 @@ namespace GwentWithoutSteroids.Rendering
                 : Color.Red;
 
             _window.Draw(turnText);
+
+            var aiCards = new Text(_font,
+                $"Cards: {_game.GetAiHandCount()}",
+                20)
+            {
+                Position = new Vector2f(uiX, 50 + GLOBAL_Y_OFFSET)
+            };
+
+            _window.Draw(aiCards);
         }
 
         public Card GetCardAtPosition(Vector2f pos)
@@ -455,6 +491,12 @@ namespace GwentWithoutSteroids.Rendering
 
                 Card = card
             };
+        }
+
+        public void TriggerPassClick()
+        {
+            _passScale = 0.85f;
+            _passPressed = true;
         }
     }
 }

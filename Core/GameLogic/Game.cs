@@ -352,5 +352,10 @@ namespace GwentWithoutSteroids.Core.GameLogic
                 "Both players draw 3 cards"
             ));
         }
+
+        public int GetAiHandCount()
+        {
+            return _ai.Hand.Count;
+        }
     }
 }
