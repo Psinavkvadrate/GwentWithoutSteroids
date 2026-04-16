@@ -4,12 +4,12 @@ namespace GwentLikeGame.Patterns.Observer
     {
         RoundStarted,
         CardPlayed,
-        CardReplaced,   // ✅ добавили
+        CardReplaced,  
         TurnChanged,
-        PlayerPassed,   // ✅ добавили
+        PlayerPassed,   
         RoundEnded,
         GameEnded,
-        Info            // ✅ добавили (для текстовых сообщений)
+        Info            
     }
 
     public class GameEvent

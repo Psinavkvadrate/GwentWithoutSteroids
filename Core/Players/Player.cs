@@ -33,10 +33,9 @@ namespace GwentLikeGame.Core.Players
 
                 var template = cards[index];
 
-                // 🔥 КЛЮЧЕВОЕ ИЗМЕНЕНИЕ
-                Hand.Add(template.Clone());  // ✅ кладём КОПИЮ
+                Hand.Add(template.Clone()); 
 
-                cards.RemoveAt(index);       // можно оставить (как "вытянули карту")
+                cards.RemoveAt(index);       
             }
         }
 

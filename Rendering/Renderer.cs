@@ -27,8 +27,8 @@ namespace GwentLikeGame.Rendering
         private const float CARD_WIDTH = 80f;
         private const float CARD_HEIGHT = 120f;
 
-        private const float ROW_HEIGHT = 130f; // расстояние между рядами
-        private const float ROW_PADDING = 10f; // отступ внутри ряда
+        private const float ROW_HEIGHT = 130f; 
+        private const float ROW_PADDING = 10f; 
         private const float ENEMY_ROW_OFFSET = -CARD_HEIGHT * 2f / 3f;
         private const float GLOBAL_Y_OFFSET = 120f;
 
@@ -41,7 +41,6 @@ namespace GwentLikeGame.Rendering
             var texture = new Texture("assets/gwentBg.jpg");
             _background = new Sprite(texture);
 
-            // растянуть на окно
             var size = _window.Size;
             _background.Scale = new Vector2f(
                 size.X / (float)texture.Size.X,
@@ -62,7 +61,7 @@ namespace GwentLikeGame.Rendering
                 };
             }
 
-            return new Color(200, 200, 80); // Skill
+            return new Color(200, 200, 80); 
         }
 
         private void DrawBoard(Player player, float startY)
@@ -129,7 +128,6 @@ namespace GwentLikeGame.Rendering
 
                 float y = startY + i * ROW_HEIGHT + ROW_PADDING;
 
-                // 🔥 ВОТ ЭТА СТРОКА — КЛЮЧЕВАЯ
                 if (isEnemy)
                     y += ENEMY_ROW_OFFSET;
 
@@ -150,7 +148,6 @@ namespace GwentLikeGame.Rendering
             float topStart = 40 + GLOBAL_Y_OFFSET;
             float bottomStart = 350 + GLOBAL_Y_OFFSET;
 
-            // AI ряды
             for (int i = 0; i < 3; i++)
             {
                 float y = topStart + i * ROW_HEIGHT;
@@ -164,7 +161,6 @@ namespace GwentLikeGame.Rendering
                 _window.Draw(line);
             }
 
-            // Центральная линия
             var middle = new RectangleShape(new Vector2f(fieldWidth, 5))
             {
                 Position = new Vector2f(FIELD_X, 330 + GLOBAL_Y_OFFSET),
@@ -172,7 +168,6 @@ namespace GwentLikeGame.Rendering
             };
             _window.Draw(middle);
 
-            // Игрок ряды
             for (int i = 0; i < 3; i++)
             {
                 float y = bottomStart + i * ROW_HEIGHT;
@@ -198,7 +193,6 @@ namespace GwentLikeGame.Rendering
 
             float totalWidth = (count - 1) * spacing + CARD_WIDTH;
 
-            // 🔥 если не помещается — уменьшаем spacing
             if (totalWidth > FIELD_WIDTH)
             {
                 spacing = (FIELD_WIDTH - CARD_WIDTH) / (count - 1);
@@ -239,7 +233,7 @@ namespace GwentLikeGame.Rendering
                     }
                     else
                     {
-                        v.CurrentPosition += diff * 0.1f; // плавность
+                        v.CurrentPosition += diff * 0.1f; 
                     }
 
                     v.Shape.Position = v.CurrentPosition;
@@ -302,7 +296,6 @@ namespace GwentLikeGame.Rendering
         {
             float uiX = 1150;
 
-            // Scores
             var playerScore = new Text(_font, $"Player: {_playerPower}", 26)
             {
                 Position = new Vector2f(uiX, 700 + GLOBAL_Y_OFFSET)
@@ -316,8 +309,6 @@ namespace GwentLikeGame.Rendering
             _window.Draw(playerScore);
             _window.Draw(aiScore);
 
-            // ================= ROUND SCORE =================
-
             var roundsText = new Text(_font,
                 $"ROUNDS\nPlayer: {_game.PlayerRounds}\nAI: {_game.AiRounds}",
                 22)
@@ -327,7 +318,6 @@ namespace GwentLikeGame.Rendering
 
             _window.Draw(roundsText);
 
-            // PASS кнопка
             var pass = new RectangleShape(new Vector2f(140, 60))
             {
                 Position = new Vector2f(uiX, 600 + GLOBAL_Y_OFFSET),
@@ -342,7 +332,6 @@ namespace GwentLikeGame.Rendering
             _window.Draw(pass);
             _window.Draw(passText);
 
-            // Лог
             float y = 150 + GLOBAL_Y_OFFSET;
 
             foreach (var line in _uiObserver.GetLog())
@@ -399,9 +388,8 @@ namespace GwentLikeGame.Rendering
             {
                 var v = _views[i];
 
-                // 🔥 ДОБАВЬ ЭТУ ПРОВЕРКУ
                 if (v.HandIndex >= 0 &&
-                    v.Position.Y > 700 && // рука внизу
+                    v.Position.Y > 700 && 
                     v.Shape.GetGlobalBounds().Contains(pos))
                 {
                     return v;
@@ -453,8 +441,7 @@ namespace GwentLikeGame.Rendering
                 TypeText = typeText,
                 Position = position,
 
-                // 🔥 НОВОЕ
-                CurrentPosition = position + new Vector2f(0, -50), // старт чуть выше
+                CurrentPosition = position + new Vector2f(0, -50), 
                 TargetPosition = position,
                 IsAnimating = true,
 

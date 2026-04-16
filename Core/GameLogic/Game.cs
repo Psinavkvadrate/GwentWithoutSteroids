@@ -74,8 +74,6 @@ namespace GwentLikeGame.Core.GameLogic
             }
         }
 
-        // ===================== COIN FLIP =====================
-
         private void StartCoinFlip()
         {
             var rnd = new Random();
@@ -100,8 +98,6 @@ namespace GwentLikeGame.Core.GameLogic
 
             _state = GameState.Mulligan;
         }
-
-        // ===================== MULLIGAN =====================
 
         public void ReplaceCard(int index)
         {
@@ -171,8 +167,6 @@ namespace GwentLikeGame.Core.GameLogic
             }
         }
 
-        // ===================== ROUND =====================
-
         private void StartRound()
         {
             ResetRound();
@@ -195,28 +189,24 @@ namespace GwentLikeGame.Core.GameLogic
 
         private void UpdateRound()
         {
-            // оба спасовали
             if (_player.HasPassed && _ai.HasPassed)
             {
                 _state = GameState.RoundEnd;
                 return;
             }
 
-            // если текущий спасовал — передаём ход
             if (_current.HasPassed)
             {
                 SwapTurns();
                 return;
             }
 
-            // ход игрока
             if (_current == _player)
             {
                 WaitingForPlayerInput = true;
-                return; // ← ВАЖНО: не даём дальше идти
+                return;
             }
 
-            // ход AI
             if (_current == _ai)
             {
                 WaitingForPlayerInput = false;
@@ -226,7 +216,7 @@ namespace GwentLikeGame.Core.GameLogic
                     _aiThinking = true;
 
                     var rnd = new Random();
-                    _aiDelayMs = rnd.Next(1000, 4000); // 1-4 сек
+                    _aiDelayMs = rnd.Next(1000, 4000); 
                     _aiTurnTime = DateTime.Now;
                 }
 
@@ -288,7 +278,6 @@ namespace GwentLikeGame.Core.GameLogic
             ));
         }
 
-        // ===================== END ROUND =====================
 
         private void EndRound()
         {
@@ -331,7 +320,6 @@ namespace GwentLikeGame.Core.GameLogic
             _state = GameState.CoinFlip;
         }
 
-        // ===================== OBSERVER =====================
 
         public void Subscribe(IObserver observer)
         {

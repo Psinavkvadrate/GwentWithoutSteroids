@@ -28,7 +28,6 @@ namespace GwentLikeGame.Patterns.Interpreter.Effects
             }
             else
             {
-                // ничья → убиваем у обоих
                 RemoveByPower(context.Opponent, enemyMax);
                 RemoveByPower(context.CurrentPlayer, myMax);
             }

@@ -46,7 +46,7 @@ namespace GwentLikeGame.Rendering
 
                 _game.Tick();
 
-                _renderer.BuildFromGame(_player, _game.GetOpponent(_player)); // ← ПЕРЕД отрисовкой
+                _renderer.BuildFromGame(_player, _game.GetOpponent(_player)); 
 
                 _window.Clear(Color.Black);
                 _renderer.Draw();
@@ -58,7 +58,6 @@ namespace GwentLikeGame.Rendering
         {
             var mousePos = new Vector2f(e.Position.X, e.Position.Y);
 
-            // ================= MULLIGAN =================
             if (_game.State == GameState.Mulligan)
             {
                 var viewCard = _renderer.GetHandCardAtPosition(mousePos);
@@ -78,11 +77,9 @@ namespace GwentLikeGame.Rendering
                 return;
             }
 
-            // ================= PLAYING =================
             if (!_game.WaitingForPlayerInput)
                 return;
 
-            // PASS
             if (mousePos.X >= _passPos.X &&
                 mousePos.X <= _passPos.X + _passSize.X &&
                 mousePos.Y >= _passPos.Y &&
